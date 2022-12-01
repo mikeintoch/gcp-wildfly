@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hibernate-app
+spec:
+  selector:
+    matchLabels:
+      app: hibernate-app
+  template:
+    metadata:
+      labels:
+        app: hibernate-app
+    spec:
+      containers:
+      - name: hibernate-app
+        image: us-central1-docker.pkg.dev/gke-project-368219/my-docker-repo/hibernate:latest
+        ports:
+          - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: db-configmap

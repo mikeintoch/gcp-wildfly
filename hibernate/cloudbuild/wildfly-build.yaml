@@ -1,0 +1,19 @@
+steps:
+
+#Build war File
+- name: 'gcr.io/cloud-builders/mvn'
+  args: ['package', '-Dmaven.test.skip=true']
+
+#Build docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build','-f','src/main/docker/Dockerfile','-t', '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${_TAG}', '.']
+
+#Push container to container registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${_TAG}']
+
+substitutions:
+ _IMAGE: hibernate
+ _TAG: latest
+ _REPOSITORY: my-docker-repo
+ _LOCATION: us-central1
